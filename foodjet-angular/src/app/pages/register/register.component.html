@@ -1,0 +1,51 @@
+<div class="container py-5 d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 160px);">
+    <div class="card shadow-lg border-0 p-4 fade-in" style="max-width: 450px; width: 100%; border-radius: 16px;">
+        <div class="card-body">
+            <!-- Logo y Cabecera -->
+            <div class="text-center mb-4">
+                <div class="logo-circle mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.8rem; background-color: var(--primary-light); color: var(--primary-color); display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                    <span>📝</span>
+                </div>
+                <h1 class="h3 fw-bold mb-1">Crea tu cuenta</h1>
+                <p class="text-muted">Regístrate para pedir en FoodJet</p>
+            </div>
+
+            <!-- Formulario de Registro -->
+            <form (submit)="onSubmit($event)">
+                <div class="mb-3">
+                    <label for="regName" class="form-label fw-bold small">
+                        <i class="bi bi-person me-2"></i>Nombre Completo
+                    </label>
+                    <input type="text" class="form-control py-2" id="regName" name="name" [(ngModel)]="name"
+                        placeholder="Ingresa tu nombre completo" required style="border-radius: 8px;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="regEmail" class="form-label fw-bold small">
+                        <i class="bi bi-envelope me-2"></i>Email
+                    </label>
+                    <input type="email" class="form-control py-2" id="regEmail" name="email" [(ngModel)]="email"
+                        placeholder="tu@email.com" required style="border-radius: 8px;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="regPassword" class="form-label fw-bold small">
+                        <i class="bi bi-lock me-2"></i>Contraseña
+                    </label>
+                    <input type="password" class="form-control py-2" id="regPassword" name="password"
+                        [(ngModel)]="password" placeholder="••••••••" required style="border-radius: 8px;">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2.5 mt-3"
+                    style="border-radius: 8px; font-weight: 600;">
+                    Registrarse <i class="bi bi-person-plus ms-2"></i>
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <small class="text-muted">¿Ya tienes cuenta? <a routerLink="/login" class="text-decoration-none fw-bold"
+                        style="color: var(--primary-hover);">Inicia sesión aquí</a></small>
+            </div>
+        </div>
+    </div>
+</div>

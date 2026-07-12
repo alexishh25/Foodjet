@@ -1,0 +1,136 @@
+<div id="checkoutView" class="fade-in">
+    <div class="container py-5">
+        <a routerLink="/" class="btn btn-link text-decoration-none mb-4 p-0">
+            <i class="bi bi-arrow-left"></i> Volver al Menú
+        </a>
+        <h1 class="mb-4">Finalizar Pedido</h1>
+        
+        @if (cartItems().length === 0) {
+            <div class="text-center py-5">
+                <i class="bi bi-cart-x display-1 text-muted"></i>
+                <p class="text-muted mt-3">Tu carrito está vacío</p>
+                <a routerLink="/" class="btn btn-primary mt-2">Ir a comprar</a>
+            </div>
+        } @else {
+            <form (submit)="onSubmit($event)" id="checkoutForm">
+                <div class="row g-4">
+                    <!-- Columna izquierda -->
+                    <div class="col-lg-7">
+                        <!-- Informacion Delivery -->
+                        <div class="card mb-4" style="border-radius: 12px; overflow: hidden;">
+                            <div class="card-body p-4">
+                                <h2 class="h4 mb-4">Información de Entrega</h2>
+                                <div class="mb-3">
+                                    <label for="customerName" class="form-label fw-bold small">
+                                        <i class="bi bi-person me-2"></i>Nombre completo
+                                    </label>
+                                    <input type="text" class="form-control py-2" id="customerName" name="customerName" [(ngModel)]="customerName" placeholder="Juan Pérez" required style="border-radius: 8px;">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customerPhone" class="form-label fw-bold small">
+                                        <i class="bi bi-telephone me-2"></i>Teléfono
+                                    </label>
+                                    <input type="tel" class="form-control py-2" id="customerPhone" name="customerPhone" [(ngModel)]="customerPhone" placeholder="999 888 777" required style="border-radius: 8px;">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customerAddress" class="form-label fw-bold small">
+                                        <i class="bi bi-geo-alt me-2"></i>Dirección de entrega
+                                    </label>
+                                    <input type="text" class="form-control py-2" id="customerAddress" name="customerAddress" [(ngModel)]="customerAddress" placeholder="Av. Principal 123, Lima" required style="border-radius: 8px;">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customerReference" class="form-label fw-bold small">Referencia (opcional)</label>
+                                    <input type="text" class="form-control py-2" id="customerReference" name="customerReference" [(ngModel)]="customerReference" placeholder="Casa blanca con portón negro" style="border-radius: 8px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Metodo de Pago -->
+                        <div class="card" style="border-radius: 12px; overflow: hidden;">
+                            <div class="card-body p-4">
+                                <h2 class="h4 mb-4">Método de Pago</h2>
+                                
+                                <div class="payment-option mb-3">
+                                    <input type="radio" class="btn-check" name="paymentMethod" id="payCash" value="cash" [(ngModel)]="paymentMethod">
+                                    <label class="btn btn-outline-primary w-100 text-start p-3" for="payCash">
+                                        <i class="bi bi-cash-stack fs-4 me-3"></i>
+                                        <div class="d-inline-block align-middle">
+                                            <div class="fw-bold">Pago en Efectivo</div>
+                                            <small class="text-muted">Paga cuando recibas tu pedido</small>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="payment-option">
+                                    <input type="radio" class="btn-check" name="paymentMethod" id="payCard" value="card" [(ngModel)]="paymentMethod">
+                                    <label class="btn btn-outline-primary w-100 text-start p-3" for="payCard">
+                                        <i class="bi bi-credit-card fs-4 me-3"></i>
+                                        <div class="d-inline-block align-middle">
+                                            <div class="fw-bold">Tarjeta de Crédito/Débito</div>
+                                            <small class="text-muted">Pago online seguro</small>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <!-- Detalles de Tarjeta -->
+                                @if (paymentMethod === 'card') {
+                                    <div id="cardDetails" class="mt-4">
+                                        <hr>
+                                        <div class="mb-3">
+                                            <label for="cardNumber" class="form-label fw-bold small">Número de tarjeta</label>
+                                            <input type="text" class="form-control py-2" id="cardNumber" name="cardNumber" [(ngModel)]="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required style="border-radius: 8px;">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="cardExpiry" class="form-label fw-bold small">Fecha de expiración</label>
+                                                <input type="text" class="form-control py-2" id="cardExpiry" name="cardExpiry" [(ngModel)]="cardExpiry" placeholder="MM/AA" maxlength="5" required style="border-radius: 8px;">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="cardCvc" class="form-label fw-bold small">CVC</label>
+                                                <input type="text" class="form-control py-2" id="cardCvc" name="cardCvc" [(ngModel)]="cardCvc" placeholder="123" maxlength="3" required style="border-radius: 8px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Columna derecha - Resumen del pedido -->
+                    <div class="col-lg-5">
+                        <div class="card sticky-top" style="top: 100px; border-radius: 12px; overflow: hidden;">
+                            <div class="card-body p-4">
+                                <h2 class="h4 mb-4">Resumen del Pedido</h2>
+                                <div id="checkoutItems" class="mb-4">
+                                    @for (item of cartItems(); track item.product.id) {
+                                        <div class="d-flex justify-content-between text-sm mb-2">
+                                            <span class="text-muted">{{ item.product.name }} x{{ item.quantity }}</span>
+                                            <span>S/ {{ (item.product.price * item.quantity).toFixed(2) }}</span>
+                                        </div>
+                                    }
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">Subtotal</span>
+                                    <span id="checkoutSubtotal">S/ {{ cartSubtotal().toFixed(2) }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span class="text-muted">Delivery</span>
+                                    <span>S/ {{ deliveryFee.toFixed(2) }}</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <span class="fw-bold">Total</span>
+                                    <span class="fs-3 fw-bold" id="checkoutTotal" style="color: var(--dark-color);">S/ {{ cartTotal().toFixed(2) }}</span>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 py-3" style="border-radius: 8px; font-weight: 600;">
+                                    Confirmar Pedido
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        }
+    </div>
+</div>

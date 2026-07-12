@@ -1,0 +1,113 @@
+<div id="trackingView" class="fade-in">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card shadow border-0" style="border-radius: 16px; overflow: hidden;">
+                    <div class="card-body p-5">
+                        <!-- Icono de Estado -->
+                        <div class="text-center mb-5">
+                            <div class="order-status-icon mb-3" [class.delivered]="status === 'delivered'">
+                                @if (status === 'preparing') {
+                                    <i class="bi bi-box-seam fs-1"></i>
+                                } @else if (status === 'on-the-way') {
+                                    <i class="bi bi-truck fs-1"></i>
+                                } @else if (status === 'delivered') {
+                                    <i class="bi bi-house-door-fill fs-1"></i>
+                                }
+                            </div>
+                            <h1 class="h3 mb-2">{{ getStatusTitle() }}</h1>
+                            <p class="text-muted">{{ getStatusDescription() }}</p>
+                            
+                            @if (status !== 'delivered') {
+                                <div class="badge bg-light text-dark mt-3 py-2 px-3 fs-6" style="border-radius: 20px;">
+                                    <i class="bi bi-clock me-2 text-primary"></i>{{ getEstimatedTime() }}
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Pasos de progreso -->
+                        <div class="order-progress mb-5">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="text-center flex-fill">
+                                    <div class="progress-step mx-auto" 
+                                         [class.active]="status === 'preparing'"
+                                         [class.completed]="status === 'on-the-way' || status === 'delivered'">
+                                        @if (status === 'on-the-way' || status === 'delivered') {
+                                            <i class="bi bi-check-circle-fill"></i>
+                                        } @else {
+                                            <i class="bi bi-box-seam"></i>
+                                        }
+                                    </div>
+                                    <small class="d-block mt-2 fw-medium">Preparando</small>
+                                </div>
+                                
+                                <div class="progress-line" 
+                                     [class.active]="status === 'on-the-way'"
+                                     [class.completed]="status === 'delivered'"></div>
+                                
+                                <div class="text-center flex-fill">
+                                    <div class="progress-step mx-auto" 
+                                         [class.active]="status === 'on-the-way'"
+                                         [class.completed]="status === 'delivered'">
+                                        @if (status === 'delivered') {
+                                            <i class="bi bi-check-circle-fill"></i>
+                                        } @else {
+                                            <i class="bi bi-truck"></i>
+                                        }
+                                    </div>
+                                    <small class="d-block mt-2 fw-medium">En camino</small>
+                                </div>
+                                
+                                <div class="progress-line" 
+                                     [class.completed]="status === 'delivered'"></div>
+                                
+                                <div class="text-center flex-fill">
+                                    <div class="progress-step mx-auto" 
+                                         [class.active]="status === 'delivered'"
+                                         [class.completed]="status === 'delivered'">
+                                        <i class="bi bi-house-door"></i>
+                                    </div>
+                                    <small class="d-block mt-2 fw-medium">Entregado</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detalles de Orden -->
+                        <div class="bg-light rounded p-4 mb-4" style="border-radius: 12px !important;">
+                            <h3 class="h5 mb-3 fw-bold">Detalles del Pedido</h3>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Número de orden:</span>
+                                <span class="fw-bold">{{ orderNumber }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Método de pago:</span>
+                                <span class="fw-bold">{{ getPaymentMethodText() }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Fecha:</span>
+                                <span class="fw-bold">{{ orderDate }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Informacion de Contacto -->
+                        <div class="alert alert-info mb-4 border-0 p-3" style="border-radius: 12px; background-color: var(--primary-light); color: var(--dark-color);">
+                            📞 ¿Tienes alguna pregunta? Llámanos al <strong>01 234 5678</strong>
+                        </div>
+
+                        <!-- Acciones -->
+                        <div class="d-grid gap-2">
+                            @if (status === 'delivered') {
+                                <a routerLink="/" class="btn btn-primary py-2.5" style="border-radius: 8px; font-weight: 600;">
+                                    Volver al Menú
+                                </a>
+                            }
+                            <button class="btn btn-outline-secondary py-2.5" style="border-radius: 8px; font-weight: 500;">
+                                Ver Historial
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
